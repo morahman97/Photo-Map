@@ -17,6 +17,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
         annotation.coordinate = locationCoordinate
         annotation.title = "Picture!"
         mapView.addAnnotation(annotation)
+        self.navigationController?.popToViewController(self, animated: true)
     }
     
     @nonobjc func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
@@ -43,6 +44,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     @IBOutlet weak var mapView: MKMapView!
+    
     let vc = UIImagePickerController()
     
     func choosePic() {
@@ -61,6 +63,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         //one degree of latitude is approximately 111 kilometers (69 miles) at all times.
         let sfRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.783333, -122.416667),
                                               MKCoordinateSpanMake(0.1, 0.1))
@@ -70,7 +73,7 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
         // Get the image captured by the UIImagePickerController
-        let originalImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        //let originalImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         let editedImage = info[UIImagePickerControllerEditedImage] as! UIImage
         
         // Do something with the images (based on your use case)
@@ -92,8 +95,10 @@ class PhotoMapViewController: UIViewController, UIImagePickerControllerDelegate,
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "tagSegue" {
+            let vc: LocationsViewController = segue.destination as! LocationsViewController
+            vc.delegate = self
+        }
     }
     
 
